@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spam Detector Image Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>Spam Detector Image Generator</h1>
+      <p>Paste a message to see whether it's likely spam and get a shareable image.</p>
+    </section>
+
+    <section class="card">
+      <form method="post" class="form">
+        <label for="message">Message to analyze</label>
+        <textarea id="message" name="message" rows="6" placeholder="Enter a message...">{{ message }}</textarea>
+        <button type="submit">Analyze & Generate Image</button>
+      </form>
+    </section>
+
+    {% if is_spam is not none %}
+    <section class="result">
+      <div class="status {{ 'spam' if is_spam else 'ham' }}">
+        <h2>{{ 'Spam detected' if is_spam else 'Looks safe' }}</h2>
+        <p>{{ 'This message contains common spam triggers.' if is_spam else 'No common spam triggers found.' }}</p>
+      </div>
+      {% if image_path %}
+      <div class="image-card">
+        <img src="{{ url_for('generated_file', filename=image_path) }}" alt="Generated spam result image" />
+        <a class="download" href="{{ url_for('generated_file', filename=image_path) }}" download>Download image</a>
+      </div>
+      {% endif %}
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>
